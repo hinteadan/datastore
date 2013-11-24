@@ -11,6 +11,7 @@ namespace HttpDataStore.Controllers
     {
         public IEnumerable<string> Get()
         {
+            
             return new string[] { "SomeData1" };
         }
     }
