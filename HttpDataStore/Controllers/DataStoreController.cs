@@ -23,5 +23,10 @@ namespace HttpDataStore.Controllers
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
+        public HttpResponseMessage Delete(string id)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
     }
 }

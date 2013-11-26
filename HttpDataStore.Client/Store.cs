@@ -70,5 +70,14 @@ namespace HttpDataStore.Client
 
             var response = request.GetResponse() as HttpWebResponse;
         }
+
+        public void Delete(string id)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
+            request.Method = "DELETE";
+            request.ContentType = "application/json";
+            request.Accept = "Accept=application/json";
+            request.GetResponse();
+        }
     }
 }
