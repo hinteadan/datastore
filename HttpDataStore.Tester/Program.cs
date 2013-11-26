@@ -13,9 +13,11 @@ namespace HttpDataStore.Tester
     {
         static void Main(string[] args)
         {
-            var response = (new Store("Tester")).Query();
+            var store = new Store("Tester");
+            Console.WriteLine("Response content:\r\n{0}", store.Query());
 
-            Console.WriteLine("Response content:\r\n{0}", response);
+            store.Save(new { Id = 1, Whatever = "Some text" });
+
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
         }

@@ -11,8 +11,12 @@ namespace HttpDataStore.Controllers
     {
         public IEnumerable<string> Get()
         {
-            
             return new string[] { "SomeData1" };
+        }
+
+        public HttpResponseMessage Put(object data)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
