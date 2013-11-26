@@ -11,7 +11,7 @@ namespace HttpDataStore
         {
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{controller}/{id}",
+                routeTemplate: "{id}",
                 defaults: new { controller = "DataStore", id = RouteParameter.Optional }
             );
 

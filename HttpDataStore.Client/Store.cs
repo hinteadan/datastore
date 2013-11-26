@@ -23,9 +23,24 @@ namespace HttpDataStore.Client
             this.storeName = name;
         }
 
-        public string Query()
+        public object Query()
         {
             HttpWebRequest request = WebRequest.CreateHttp(storeUrl);
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.Accept = "Accept=application/json";
+
+            var response = request.GetResponse() as HttpWebResponse;
+
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        public object Load(string id)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";

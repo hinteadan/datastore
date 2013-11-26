@@ -9,9 +9,14 @@ namespace HttpDataStore.Controllers
 {
     public class DataStoreController : ApiController
     {
-        public IEnumerable<string> Get()
+        public IEnumerable<object> Get()
         {
             return new string[] { "SomeData1" };
+        }
+
+        public object Get(string id)
+        {
+            return new { Id = id, Data = "SomeData" };
         }
 
         public HttpResponseMessage Put(object data)

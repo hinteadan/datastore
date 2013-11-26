@@ -14,7 +14,8 @@ namespace HttpDataStore.Tester
         static void Main(string[] args)
         {
             var store = new Store("Tester");
-            Console.WriteLine("Response content:\r\n{0}", store.Query());
+            Console.WriteLine("Query response content:\r\n{0}", store.Query());
+            Console.WriteLine("Load response content:\r\n{0}", store.Load("39557ca6-693c-4fb6-91d6-89a77d0a3efa"));
 
             store.Save(new { Id = 1, Whatever = "Some text" });
 
