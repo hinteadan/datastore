@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
+using HttpDataStore.Infrastructure;
 using HttpDataStore.Model;
 
 namespace HttpDataStore.Controllers
 {
-    public class DataStoreController : ApiController
+    public class DataStoreController : BaseController
     {
         public Entity<object>[] Get()
         {

@@ -1,0 +1,14 @@
+﻿
+using System;
+using System.Collections.Generic;
+using HttpDataStore.Model;
+namespace HttpDataStore.StorageEngine
+{
+    public interface IStoreData<T>
+    {
+        Entity<T> Save(Entity<T> data);
+        Entity<T> Load(Guid id);
+        IEnumerable<Entity<T>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate);
+        void Delete(Guid id);
+    }
+}
