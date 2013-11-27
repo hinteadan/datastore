@@ -12,16 +12,16 @@ namespace HttpDataStore.Model
             this.Meta = meta;
         }
         public Entity()
-            : this(new Guid(), default(T), new Dictionary<string, object>())
+            : this(Guid.NewGuid(), default(T), new Dictionary<string, object>())
         { }
         public Entity(T data)
-            : this(new Guid(), data, new Dictionary<string, object>())
+            : this(Guid.NewGuid(), data, new Dictionary<string, object>())
         { }
         public Entity(Guid id, T data)
             : this(id, data, new Dictionary<string, object>())
         { }
         public Entity(T data, Dictionary<string, object> meta)
-            : this(new Guid(), data, meta)
+            : this(Guid.NewGuid(), data, meta)
         { }
 
 

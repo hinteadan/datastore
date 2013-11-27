@@ -9,11 +9,12 @@ namespace HttpDataStore.Tester
         static void Main(string[] args)
         {
             var store = new Store<object>("Tester");
-            Console.WriteLine("Query response content:\r\n{0}", store.Query());
-            Console.WriteLine("Load response content:\r\n{0}", store.Load(Guid.Empty));
+            var entity = new Entity<object>();
 
-            store.Save(new Entity<object>());
-            store.Delete(Guid.Empty);
+            store.Save(entity);
+            Console.WriteLine("Query response content:\r\n{0}", store.Query());
+            Console.WriteLine("Load response content:\r\n{0}", store.Load(entity.Id));
+            store.Delete(entity.Id);
 
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();

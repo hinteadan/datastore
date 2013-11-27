@@ -13,6 +13,7 @@ namespace HttpDataStore.StorageEngine
         public Entity<object> Save(Entity<object> data)
         {
             dataStore[data.Id] = data;
+            metaStore[data.Id] = data.Meta;
             return data;
         }
 
@@ -24,11 +25,12 @@ namespace HttpDataStore.StorageEngine
         public IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
             var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
-            return dataStore.Where(e => ids.Contains(e.Key)).Select(e => e.Value).ToArray();
+            return dataStore.Where(e => ids.Contains(e.Key)).Select(e => e.Value);
         }
 
         public void Delete(Guid id)
         {
+            metaStore.Remove(id);
             dataStore.Remove(id);
         }
     }

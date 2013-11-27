@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Routing;
+﻿using System.Web.Http;
+using HttpDataStore.StorageEngine;
 
 namespace HttpDataStore
 {
@@ -14,6 +10,7 @@ namespace HttpDataStore
     {
         protected void Application_Start()
         {
+            this.Context.Application["DataStore"] = new InMemoryStore();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
         }
     }
