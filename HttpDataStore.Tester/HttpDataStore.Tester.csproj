@@ -52,6 +52,10 @@
       <Project>{e702f25c-1c61-4ae1-8e86-b6b442ad4813}</Project>
       <Name>HttpDataStore.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HttpDataStore.Model\HttpDataStore.Model.csproj">
+      <Project>{0d5e9677-f352-42ac-8ea5-2a90a2521c8b}</Project>
+      <Name>HttpDataStore.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

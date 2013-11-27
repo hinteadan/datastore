@@ -1,30 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using HttpDataStore.Model;
 
 namespace HttpDataStore.Controllers
 {
     public class DataStoreController : ApiController
     {
-        public IEnumerable<object> Get()
+        public Entity<object>[] Get()
         {
-            return new string[] { "SomeData1" };
+            return new Entity<object>[] { new Entity<object>() };
         }
 
-        public object Get(string id)
+        public Entity<object> Get(Guid id)
         {
-            return new { Id = id, Data = "SomeData" };
+            return new Entity<object>(id, null as object);
         }
 
-        public HttpResponseMessage Put(object data)
+        public HttpResponseMessage Put(Entity<object> data)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage Delete(string id)
+        public HttpResponseMessage Delete(Guid id)
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
         }

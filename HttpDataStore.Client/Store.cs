@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using HttpDataStore.Model;
+using Newtonsoft.Json;
 
 namespace HttpDataStore.Client
 {
-    public class Store
+    public class Store<T>
     {
         private readonly string storeName;
         private readonly string storeUrl = "http://localhost/HttpDataStore/";
@@ -23,7 +21,7 @@ namespace HttpDataStore.Client
             this.storeName = name;
         }
 
-        public object Query()
+        public Entity<T>[] Query()
         {
             HttpWebRequest request = WebRequest.CreateHttp(storeUrl);
             request.Method = "GET";
@@ -34,11 +32,11 @@ namespace HttpDataStore.Client
 
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
-                return reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<Entity<T>[]>(reader.ReadToEnd());
             }
         }
 
-        public object Load(string id)
+        public Entity<T> Load(Guid id)
         {
             HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
             request.Method = "GET";
@@ -49,13 +47,13 @@ namespace HttpDataStore.Client
 
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
-                return reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<Entity<T>>(reader.ReadToEnd());
             }
         }
 
-        public void Save(object entity)
+        public void Save(Entity<T> entity)
         {
-            string serializedObject = Newtonsoft.Json.JsonConvert.SerializeObject(entity);
+            string serializedObject = JsonConvert.SerializeObject(entity);
             HttpWebRequest request = WebRequest.CreateHttp(storeUrl);
             request.Method = "PUT";
             request.AllowWriteStreamBuffering = false;
@@ -71,7 +69,7 @@ namespace HttpDataStore.Client
             var response = request.GetResponse() as HttpWebResponse;
         }
 
-        public void Delete(string id)
+        public void Delete(Guid id)
         {
             HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
             request.Method = "DELETE";
