@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using HttpDataStore.Model;
 using Newtonsoft.Json;
 
@@ -11,7 +12,7 @@ namespace HttpDataStore.StorageEngine
     {
         private readonly DirectoryInfo storeDirectory;
         private readonly string metaStoreFilePath;
-        private readonly Dictionary<Guid, Dictionary<string, object>> metaStore = new Dictionary<Guid, Dictionary<string, object>>();
+        private readonly Dictionary<Guid, Dictionary<string, object>> metaStore;
 
         public JsonFileStore()
         {
@@ -27,6 +28,7 @@ namespace HttpDataStore.StorageEngine
                 storeDirectory.Create();
             }
             metaStoreFilePath = GenerateMetaStoreFilePath();
+            metaStore = InitializeMetaStore();
         }
 
         public JsonFileStore(string storeDirectoryPath)
@@ -42,6 +44,7 @@ namespace HttpDataStore.StorageEngine
                 storeDirectory.Create();
             }
             metaStoreFilePath = GenerateMetaStoreFilePath();
+            metaStore = InitializeMetaStore();
         }
 
         public Entity<object> Save(Entity<object> data)
@@ -64,7 +67,8 @@ namespace HttpDataStore.StorageEngine
 
         public IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
-            throw new NotImplementedException();
+            var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
+            return ids.Select(id => Load(id)).ToArray();
         }
 
         public void Delete(Guid id)
@@ -89,6 +93,18 @@ namespace HttpDataStore.StorageEngine
             File.WriteAllText(
                 metaStoreFilePath,
                 JsonConvert.SerializeObject(metaStore)
+                );
+        }
+
+        private Dictionary<Guid, Dictionary<string, object>> InitializeMetaStore()
+        {
+            if (!File.Exists(metaStoreFilePath))
+            {
+                return new Dictionary<Guid, Dictionary<string, object>>();
+            }
+
+            return JsonConvert.DeserializeObject<Dictionary<Guid, Dictionary<string, object>>>(
+                File.ReadAllText(metaStoreFilePath)
                 );
         }
     }
