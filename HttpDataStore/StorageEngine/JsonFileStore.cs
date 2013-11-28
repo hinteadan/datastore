@@ -78,6 +78,11 @@ namespace HttpDataStore.StorageEngine
             UpdateMetaFile();
         }
 
+        public virtual IEnumerable<KeyValuePair<Guid, Dictionary<string, object>>> QueryMeta(Func<Dictionary<string, object>, bool> metaDataPredicate)
+        {
+            return metaStore.Where(e => metaDataPredicate(e.Value)).ToArray();
+        }
+
         internal string GenerateDataFilePath(Guid id)
         {
             return string.Format("{0}\\{1}", storeDirectory.FullName, id);

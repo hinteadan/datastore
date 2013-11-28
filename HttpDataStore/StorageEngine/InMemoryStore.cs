@@ -33,5 +33,10 @@ namespace HttpDataStore.StorageEngine
             metaStore.Remove(id);
             dataStore.Remove(id);
         }
+
+        public IEnumerable<KeyValuePair<Guid, Dictionary<string, object>>> QueryMeta(Func<Dictionary<string, object>, bool> metaDataPredicate)
+        {
+            return metaStore.Where(e => metaDataPredicate(e.Value)).ToArray();
+        }
     }
 }
