@@ -90,6 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageEngine\InMemoryStore.cs" />
     <Compile Include="StorageEngine\IStoreData.cs" />
+    <Compile Include="StorageEngine\JsonFileStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

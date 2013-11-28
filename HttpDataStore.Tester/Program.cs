@@ -12,7 +12,7 @@ namespace HttpDataStore.Tester
             var entity = new Entity<object>();
 
             store.Save(entity);
-            Console.WriteLine("Query response content:\r\n{0}", store.Query());
+            //Console.WriteLine("Query response content:\r\n{0}", store.Query());
             Console.WriteLine("Load response content:\r\n{0}", store.Load(entity.Id));
             store.Delete(entity.Id);
 
