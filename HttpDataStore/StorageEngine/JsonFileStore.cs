@@ -12,7 +12,7 @@ namespace HttpDataStore.StorageEngine
     {
         private readonly DirectoryInfo storeDirectory;
         private readonly string metaStoreFilePath;
-        private readonly Dictionary<Guid, Dictionary<string, object>> metaStore;
+        protected readonly Dictionary<Guid, Dictionary<string, object>> metaStore;
 
         public JsonFileStore()
         {
@@ -47,7 +47,7 @@ namespace HttpDataStore.StorageEngine
             metaStore = InitializeMetaStore();
         }
 
-        public Entity<object> Save(Entity<object> data)
+        public virtual Entity<object> Save(Entity<object> data)
         {
             File.WriteAllText(
                 GenerateDataFilePath(data.Id),
@@ -58,20 +58,20 @@ namespace HttpDataStore.StorageEngine
             return data;
         }
 
-        public Entity<object> Load(Guid id)
+        public virtual Entity<object> Load(Guid id)
         {
             return JsonConvert.DeserializeObject<Entity<object>>(
                 File.ReadAllText(GenerateDataFilePath(id))
                 );
         }
 
-        public IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
+        public virtual IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
             var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
             return ids.Select(id => Load(id)).ToArray();
         }
 
-        public void Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
             File.Delete(GenerateDataFilePath(id));
             metaStore.Remove(id);

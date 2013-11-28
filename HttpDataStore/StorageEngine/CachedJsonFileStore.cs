@@ -1,46 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Caching;
 using HttpDataStore.Model;
 
 namespace HttpDataStore.StorageEngine
 {
-    public class CachedJsonFileStore : IStoreData<object>
+    public class CachedJsonFileStore : JsonFileStore
     {
         private readonly Guid cacheRepositoryId = Guid.NewGuid();
         private readonly MemoryCache cache;
-        private readonly JsonFileStore fileStore;
 
         public CachedJsonFileStore()
+            : base()
         {
-            this.fileStore = new JsonFileStore();
             cache = new MemoryCache(cacheRepositoryId.ToString());
         }
 
         public CachedJsonFileStore(string storeDirectoryPath)
+            : base(storeDirectoryPath)
         {
-            this.fileStore = new JsonFileStore(storeDirectoryPath);
             cache = new MemoryCache(cacheRepositoryId.ToString());
         }
 
-        public Entity<object> Save(Entity<object> data)
+        public override Entity<object> Save(Entity<object> data)
         {
-            return fileStore.Save(data);
+            cache.Set(data.Id.ToString(), data, new CacheItemPolicy());
+            return base.Save(data);
         }
 
-        public Entity<object> Load(Guid id)
+        public override Entity<object> Load(Guid id)
         {
-            return fileStore.Load(id);
+            return cache.AddOrGetExisting(id.ToString(), base.Load(id), new CacheItemPolicy()) as Entity<object>;
         }
 
-        public IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
+        public override IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
-            return fileStore.Query(metaDataPredicate);
+            var ids = base.metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
+            return ids.Select(id => Load(id)).ToArray();
         }
 
-        public void Delete(Guid id)
+        public override void Delete(Guid id)
         {
-            fileStore.Delete(id);
+            cache.Remove(id.ToString());
+            base.Delete(id);
         }
     }
 }

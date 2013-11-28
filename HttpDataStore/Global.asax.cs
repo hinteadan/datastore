@@ -10,7 +10,7 @@ namespace HttpDataStore
     {
         protected void Application_Start()
         {
-            this.Context.Application["DataStore"] = new JsonFileStore();
+            this.Context.Application["DataStore"] = new CachedJsonFileStore();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
         }
     }
