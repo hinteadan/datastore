@@ -9,17 +9,12 @@ namespace HttpDataStore.Client
 {
     public class Store<T>
     {
-        private readonly string storeName;
         private readonly string storeUrl = "http://localhost/HttpDataStore/";
 
-        public Store(string name)
+        public Store() { }
+        public Store(string storeUrl)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Store name cannot be empty", "name");
-            }
-
-            this.storeName = name;
+            this.storeUrl = storeUrl;
         }
 
         public Entity<T>[] Query(params QueryParameter[] queryParams)
