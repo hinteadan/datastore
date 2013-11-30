@@ -4,7 +4,14 @@ namespace HttpDataStore.Client
 {
     public enum QueryParameterOperator
     {
-        Equals
+        Equals,
+        LowerThan,
+        LowerThanOrEqual,
+        HigherThan,
+        HigherThanOrEqual,
+        Contains,
+        BeginsWith,
+        EndsWith
     }
 
     public enum ChainOperation
