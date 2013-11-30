@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using HttpDataStore.Infrastructure;
@@ -8,9 +9,14 @@ namespace HttpDataStore.Controllers
 {
     public class DataStoreController : BaseController
     {
-        public Entity<object>[] Get()
+        public HttpResponseMessage Get()
         {
-            return new QueryDataStore(DataStore).Query(Request.RequestUri.ParseQueryString());
+            var queryString = Request.RequestUri.ParseQueryString();
+            if (queryString.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k)).Count() == 0)
+            {
+                return new HttpResponseMessage(HttpStatusCode.RequestEntityTooLarge);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, new QueryDataStore(DataStore).Query(queryString));
         }
 
         public Entity<object> Get(Guid id)

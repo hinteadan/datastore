@@ -27,16 +27,21 @@ namespace HttpDataStore
             return dataStore.Query(ConvertQueryParamsToMetaPredicate(queryParams)).ToArray();
         }
 
+        public KeyValuePair<Guid, Dictionary<string, object>>[] QueryMeta(NameValueCollection queryParams)
+        {
+            return dataStore.QueryMeta(ConvertQueryParamsToMetaPredicate(queryParams)).ToArray();
+        }
+
         private Func<Dictionary<string, object>, bool> ConvertQueryParamsToMetaPredicate(NameValueCollection queryParams)
         {
             ChainOperation chainWith = (ChainOperation)Enum.Parse(typeof(ChainOperation), queryParams["chainWith"], true);
             switch (chainWith)
             {
                 case ChainOperation.And:
-                    return meta => queryParams.AllKeys.Where(k => k != "chainWith")
+                    return meta => queryParams.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k))
                         .All(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
                 case ChainOperation.Or:
-                    return meta => queryParams.AllKeys.Where(k => k != "chainWith")
+                    return meta => queryParams.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k))
                         .Any(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
                 default:
                     return meta => true;

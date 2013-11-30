@@ -25,9 +25,11 @@ namespace HttpDataStore.Tester
             store.Save(entities[0]);
             store.Save(entities[1]);
 
-            var queryResult = store.Query(
+            var queryResult = store.QueryMeta(
                 new QueryParameter { Name = "Time", Value = DateTime.Today }
                 );
+
+            queryResult = store.QueryMeta();
 
             Console.WriteLine("Query response content:\r\n{0}", queryResult);
             store.Delete(entities[0].Id);

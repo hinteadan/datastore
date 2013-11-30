@@ -41,9 +41,33 @@ namespace HttpDataStore.Client
             }
         }
 
+        public KeyValuePair<Guid, Dictionary<string, object>>[] QueryMeta(params QueryParameter[] queryParams)
+        {
+            return QueryMeta(ChainOperation.And, queryParams);
+        }
+        public KeyValuePair<Guid, Dictionary<string, object>>[] QueryMeta(ChainOperation chain, params QueryParameter[] queryParams)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp(GenerateQueryMetaUrl(chain, queryParams));
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.Accept = "Accept=application/json";
+
+            var response = request.GetResponse() as HttpWebResponse;
+
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                return JsonConvert.DeserializeObject<KeyValuePair<Guid, Dictionary<string, object>>[]>(reader.ReadToEnd());
+            }
+        }
+
         private string GenerateQueryUrl(ChainOperation chain, IEnumerable<QueryParameter> queryParams)
         {
             return string.Format("{0}?chainWith={1}&{2}", storeUrl, chain, string.Join("&", queryParams));
+        }
+
+        private string GenerateQueryMetaUrl(ChainOperation chain, IEnumerable<QueryParameter> queryParams)
+        {
+            return string.Format("{0}meta?chainWith={1}&{2}", storeUrl, chain, string.Join("&", queryParams));
         }
 
         public Entity<T> Load(Guid id)
