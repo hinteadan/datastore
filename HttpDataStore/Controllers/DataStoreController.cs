@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using HttpDataStore.Infrastructure;
@@ -11,7 +10,7 @@ namespace HttpDataStore.Controllers
     {
         public Entity<object>[] Get()
         {
-            return DataStore.Query(m => true).ToArray();
+            return new QueryDataStore(DataStore).Query(Request.RequestUri.ParseQueryString());
         }
 
         public Entity<object> Get(Guid id)

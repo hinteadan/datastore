@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using HttpDataStore.Model;
@@ -21,9 +22,13 @@ namespace HttpDataStore.Client
             this.storeName = name;
         }
 
-        public Entity<T>[] Query()
+        public Entity<T>[] Query(params QueryParameter[] queryParams)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(storeUrl);
+            return Query(ChainOperation.And, queryParams);
+        }
+        public Entity<T>[] Query(ChainOperation chain, params QueryParameter[] queryParams)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp(GenerateQueryUrl(chain, queryParams));
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
@@ -34,6 +39,11 @@ namespace HttpDataStore.Client
             {
                 return JsonConvert.DeserializeObject<Entity<T>[]>(reader.ReadToEnd());
             }
+        }
+
+        private string GenerateQueryUrl(ChainOperation chain, IEnumerable<QueryParameter> queryParams)
+        {
+            return string.Format("{0}?chainWith={1}&{2}", storeUrl, chain, string.Join("&", queryParams));
         }
 
         public Entity<T> Load(Guid id)
