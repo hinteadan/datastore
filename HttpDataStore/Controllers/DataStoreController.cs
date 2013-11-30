@@ -27,7 +27,7 @@ namespace HttpDataStore.Controllers
         public HttpResponseMessage Put(Entity<object> data)
         {
             DataStore.Save(data);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, data.Id);
         }
 
         public HttpResponseMessage Delete(Guid id)

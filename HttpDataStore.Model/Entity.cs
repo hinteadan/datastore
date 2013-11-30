@@ -5,6 +5,8 @@ namespace HttpDataStore.Model
 {
     public class Entity<T>
     {
+        Guid id;
+
         public Entity(Guid id, T data, Dictionary<string, object> meta)
         {
             this.Id = id;
@@ -25,7 +27,17 @@ namespace HttpDataStore.Model
         { }
 
 
-        public Guid Id { get; set; }
+        public Guid Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                this.id = value.Equals(Guid.Empty) ? Guid.NewGuid() : value;
+            }
+        }
         public Dictionary<string, object> Meta { get; private set; }
         public T Data { get; set; }
     }
