@@ -53,7 +53,7 @@ namespace HttpDataStore
             switch (queryParameter.Operator)
             {
                 case QueryParameterOperator.Equals:
-                    return metaValue == queryParameter.Value;
+                    return metaValue.Equals(queryParameter.Value);
                 default:
                     throw new NotImplementedException(string.Format("Operator <{0}> is not implemented", queryParameter.Operator));
             }

@@ -10,17 +10,26 @@ namespace HttpDataStore.Tester
         static void Main(string[] args)
         {
             var store = new Store<object>("Tester");
-            var entity = new Entity<object>(null, new Dictionary<string, object>() { 
-                { "Name", "Dummy" }
-            });
 
-            store.Save(entity);
-            Console.WriteLine("Query response content:\r\n{0}", store.Query(
-                new QueryParameter { Name = "Name", Value = "Dummy" },
-                new QueryParameter { Name = "Name2", Value = "Dummy" }
-                ));
-            Console.WriteLine("Load response content:\r\n{0}", store.Load(entity.Id));
-            store.Delete(entity.Id);
+            var entities = new Entity<object>[] { 
+                new Entity<object>(null, new Dictionary<string, object>() { 
+                    { "Name", "Dummy1" }
+                }),
+                new Entity<object>(null, new Dictionary<string, object>() { 
+                    { "Name", "Dummy2" }
+                })
+            };
+
+            store.Save(entities[0]);
+            store.Save(entities[1]);
+
+            var queryResult = store.Query(
+                new QueryParameter { Name = "Name", Value = "Dummy1" }
+                );
+
+            Console.WriteLine("Query response content:\r\n{0}", queryResult);
+            store.Delete(entities[0].Id);
+            store.Delete(entities[1].Id);
 
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();

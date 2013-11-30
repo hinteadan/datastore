@@ -68,7 +68,7 @@ namespace HttpDataStore.StorageEngine
         public virtual IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
             var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
-            return ids.Select(id => Load(id)).ToArray();
+            return ids.Select(id => Load(id)).Where(d => d != null).ToArray();
         }
 
         public virtual void Delete(Guid id)

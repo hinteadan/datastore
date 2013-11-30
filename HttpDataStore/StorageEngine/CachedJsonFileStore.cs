@@ -37,7 +37,7 @@ namespace HttpDataStore.StorageEngine
         public override IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
             var ids = base.metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
-            return ids.Select(id => Load(id)).ToArray();
+            return ids.Select(id => Load(id)).Where(d => d != null).ToArray();
         }
 
         public override void Delete(Guid id)
