@@ -35,5 +35,10 @@ namespace HttpDataStore.Controllers
             DataStore.Delete(id);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
+        public HttpResponseMessage Options()
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
     }
 }
