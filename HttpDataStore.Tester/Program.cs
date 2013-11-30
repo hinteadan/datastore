@@ -13,10 +13,12 @@ namespace HttpDataStore.Tester
 
             var entities = new Entity<object>[] { 
                 new Entity<object>(null, new Dictionary<string, object>() { 
-                    { "Name", "Dummy1" }
+                    { "Name", "Dummy1" },
+                    { "Time", DateTime.Today }
                 }),
                 new Entity<object>(null, new Dictionary<string, object>() { 
-                    { "Name", "Dummy2" }
+                    { "Name", "Dummy2" },
+                    { "Time", DateTime.Today.AddDays(2) }
                 })
             };
 
@@ -24,7 +26,7 @@ namespace HttpDataStore.Tester
             store.Save(entities[1]);
 
             var queryResult = store.Query(
-                new QueryParameter { Name = "Name", Value = "Dummy1" }
+                new QueryParameter { Name = "Time", Value = DateTime.Today }
                 );
 
             Console.WriteLine("Query response content:\r\n{0}", queryResult);
