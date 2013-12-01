@@ -83,7 +83,7 @@ namespace HttpDataStore.StorageEngine
             return metaStore.Where(e => metaDataPredicate(e.Value)).ToArray();
         }
 
-        internal string GenerateDataFilePath(Guid id)
+        private string GenerateDataFilePath(Guid id)
         {
             return string.Format("{0}\\{1}", storeDirectory.FullName, id);
         }
