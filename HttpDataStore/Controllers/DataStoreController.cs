@@ -19,9 +19,14 @@ namespace HttpDataStore.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, new QueryDataStore(DataStore).Query(queryString));
         }
 
-        public Entity<object> Get(Guid id)
+        public HttpResponseMessage Get(Guid id)
         {
-            return DataStore.Load(id);
+            var entity = DataStore.Load(id);
+            if(entity == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
         public HttpResponseMessage Put(Entity<object> data)
