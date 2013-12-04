@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HttpDataStore.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
-using HttpDataStore.Model;
 
 namespace HttpDataStore.StorageEngine
 {
@@ -31,7 +31,7 @@ namespace HttpDataStore.StorageEngine
 
         public override Entity<object> Load(Guid id)
         {
-            return cache.AddOrGetExisting(id.ToString(), base.Load(id), new CacheItemPolicy()) as Entity<object>;
+            return (cache.AddOrGetExisting(id.ToString(), base.Load(id), new CacheItemPolicy()) ?? cache[id.ToString()]) as Entity<object>;
         }
 
         public override IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
