@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Globalization;
 namespace HttpDataStore.Client
 {
     public enum QueryParameterOperator
@@ -28,7 +29,7 @@ namespace HttpDataStore.Client
 
         public override string ToString()
         {
-            return string.Format("{0}={1}:{2}", this.Name, this.Operator, this.Value);
+            return string.Format(CultureInfo.InvariantCulture, "{0}={1}:{2}", this.Name, this.Operator, this.Value);
         }
 
         public static QueryParameter Parse(string name, string queryCondition)
