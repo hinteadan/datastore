@@ -1,11 +1,11 @@
 ﻿
+using HttpDataStore.Client;
+using HttpDataStore.Model;
+using HttpDataStore.StorageEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using HttpDataStore.Client;
-using HttpDataStore.Model;
-using HttpDataStore.StorageEngine;
 namespace HttpDataStore
 {
     public class QueryDataStore
@@ -38,10 +38,10 @@ namespace HttpDataStore
             switch (chainWith)
             {
                 case ChainOperation.And:
-                    return meta => queryParams.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k))
+                    return meta => queryParams.AllKeys.Where(k => meta.ContainsKey(k) && k != "chainWith" && !string.IsNullOrWhiteSpace(k))
                         .All(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
                 case ChainOperation.Or:
-                    return meta => queryParams.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k))
+                    return meta => queryParams.AllKeys.Where(k => meta.ContainsKey(k) && k != "chainWith" && !string.IsNullOrWhiteSpace(k))
                         .Any(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
                 default:
                     return meta => true;
