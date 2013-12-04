@@ -95,6 +95,7 @@
     <Compile Include="StorageEngine\InMemoryStore.cs" />
     <Compile Include="StorageEngine\IStoreData.cs" />
     <Compile Include="StorageEngine\JsonFileStore.cs" />
+    <Compile Include="StorageEngine\StoreRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
