@@ -10,18 +10,18 @@ namespace HttpDataStore.Client
     public class Store<T>
     {
         private readonly string storeUrl;
+        private readonly string storeName;
 
-        public Store(string storeUrl, string storeName)
+        public Store(string storeName, string storeUrl)
         {
-            this.storeUrl = string.IsNullOrWhiteSpace(storeName) ?
-                storeUrl :
-                string.Format("{0}{1}/", storeUrl, storeName);
+            this.storeUrl = storeUrl;
+            this.storeName = storeName;
         }
-        public Store(string storeUrl)
-            : this(storeUrl, null)
+        public Store(string storeName)
+            : this(storeName, "http://localhost/HttpDataStore/")
         { }
         public Store()
-            : this("http://localhost/HttpDataStore/", null)
+            : this(null, "http://localhost/HttpDataStore/")
         { }
 
 
@@ -65,17 +65,17 @@ namespace HttpDataStore.Client
 
         private string GenerateQueryUrl(ChainOperation chain, IEnumerable<QueryParameter> queryParams)
         {
-            return string.Format("{0}?chainWith={1}&{2}", storeUrl, chain, string.Join("&", queryParams));
+            return string.Format("{0}/{1}/?chainWith={2}&{3}", storeUrl, storeName, chain, string.Join("&", queryParams));
         }
 
         private string GenerateQueryMetaUrl(ChainOperation chain, IEnumerable<QueryParameter> queryParams)
         {
-            return string.Format("{0}meta?chainWith={1}&{2}", storeUrl, chain, string.Join("&", queryParams));
+            return string.Format("{0}meta/{1}/?chainWith={2}&{3}", storeUrl, storeName, chain, string.Join("&", queryParams));
         }
 
         public Entity<T> Load(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}", storeUrl, id));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}/", storeUrl, id, storeName));
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
@@ -91,7 +91,7 @@ namespace HttpDataStore.Client
         public void Save(Entity<T> entity)
         {
             string serializedObject = JsonConvert.SerializeObject(entity);
-            HttpWebRequest request = WebRequest.CreateHttp(storeUrl);
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}/", storeUrl, storeName));
             request.Method = "PUT";
             request.AllowWriteStreamBuffering = false;
             request.ContentType = "application/json";
@@ -108,7 +108,7 @@ namespace HttpDataStore.Client
 
         public void Delete(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}", storeUrl, id));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}/", storeUrl, id, storeName));
             request.Method = "DELETE";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
