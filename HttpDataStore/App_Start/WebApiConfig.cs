@@ -9,13 +9,13 @@ namespace HttpDataStore
         {
             config.Routes.MapHttpRoute(
                 name: "MetaApi",
-                routeTemplate: "meta/{storeName}/",
+                routeTemplate: "meta/{storeName}",
                 defaults: new { controller = "DataStoreMeta", storeName = "Default", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{id}/{storeName}/",
+                routeTemplate: "{storeName}/{id}",
                 defaults: new { controller = "DataStore", storeName = "Default", id = RouteParameter.Optional }
             );
 

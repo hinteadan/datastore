@@ -75,7 +75,7 @@ namespace HttpDataStore.Client
 
         public Entity<T> Load(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}/", storeUrl, id, storeName));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}", storeUrl, storeName, id));
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
@@ -108,7 +108,7 @@ namespace HttpDataStore.Client
 
         public void Delete(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}/", storeUrl, id, storeName));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}/{2}", storeUrl, storeName, id));
             request.Method = "DELETE";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
