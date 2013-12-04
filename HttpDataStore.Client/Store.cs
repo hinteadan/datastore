@@ -1,21 +1,29 @@
-﻿using System;
+﻿using HttpDataStore.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using HttpDataStore.Model;
-using Newtonsoft.Json;
 
 namespace HttpDataStore.Client
 {
     public class Store<T>
     {
-        private readonly string storeUrl = "http://localhost/HttpDataStore/";
+        private readonly string storeUrl;
 
-        public Store() { }
-        public Store(string storeUrl)
+        public Store(string storeUrl, string storeName)
         {
-            this.storeUrl = storeUrl;
+            this.storeUrl = string.IsNullOrWhiteSpace(storeName) ?
+                storeUrl :
+                string.Format("{0}{1}/", storeUrl, storeName);
         }
+        public Store(string storeUrl)
+            : this(storeUrl, null)
+        { }
+        public Store()
+            : this("http://localhost/HttpDataStore/", null)
+        { }
+
 
         public Entity<T>[] Query(params QueryParameter[] queryParams)
         {
@@ -67,7 +75,7 @@ namespace HttpDataStore.Client
 
         public Entity<T> Load(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}", storeUrl, id));
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";
@@ -100,7 +108,7 @@ namespace HttpDataStore.Client
 
         public void Delete(Guid id)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}/{1}", storeUrl, id));
+            HttpWebRequest request = WebRequest.CreateHttp(string.Format("{0}{1}", storeUrl, id));
             request.Method = "DELETE";
             request.ContentType = "application/json";
             request.Accept = "Accept=application/json";

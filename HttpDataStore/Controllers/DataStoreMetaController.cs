@@ -1,14 +1,14 @@
-﻿using System;
+﻿using HttpDataStore.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using HttpDataStore.Infrastructure;
 
 namespace HttpDataStore.Controllers
 {
     public class DataStoreMetaController : BaseController
     {
-        public KeyValuePair<Guid, Dictionary<string, object>>[] Get()
+        public KeyValuePair<Guid, Dictionary<string, object>>[] Get(string storeName)
         {
             return new QueryDataStore(DataStore).QueryMeta(Request.RequestUri.ParseQueryString());
         }

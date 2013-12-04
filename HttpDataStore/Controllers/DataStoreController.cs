@@ -9,7 +9,7 @@ namespace HttpDataStore.Controllers
 {
     public class DataStoreController : BaseController
     {
-        public HttpResponseMessage Get()
+        public HttpResponseMessage Get(string storeName)
         {
             var queryString = Request.RequestUri.ParseQueryString();
             if (queryString.AllKeys.Where(k => k != "chainWith" && !string.IsNullOrWhiteSpace(k)).Count() == 0)
@@ -19,7 +19,7 @@ namespace HttpDataStore.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, new QueryDataStore(DataStore).Query(queryString));
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public HttpResponseMessage Get(Guid id, string storeName)
         {
             try
             {
@@ -31,13 +31,13 @@ namespace HttpDataStore.Controllers
             }
         }
 
-        public HttpResponseMessage Put(Entity<object> data)
+        public HttpResponseMessage Put(Entity<object> data, string storeName)
         {
             DataStore.Save(data);
             return Request.CreateResponse(HttpStatusCode.OK, data.Id);
         }
 
-        public HttpResponseMessage Delete(Guid id)
+        public HttpResponseMessage Delete(Guid id, string storeName)
         {
             DataStore.Delete(id);
             return new HttpResponseMessage(HttpStatusCode.OK);
