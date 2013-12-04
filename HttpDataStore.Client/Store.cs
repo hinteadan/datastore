@@ -21,7 +21,7 @@ namespace HttpDataStore.Client
             : this(storeName, "http://localhost/HttpDataStore/")
         { }
         public Store()
-            : this(null, "http://localhost/HttpDataStore/")
+            : this("Default", "http://localhost/HttpDataStore/")
         { }
 
 

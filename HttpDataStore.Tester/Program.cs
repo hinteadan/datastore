@@ -9,7 +9,7 @@ namespace HttpDataStore.Tester
     {
         static void Main(string[] args)
         {
-            var store = new Store<object>("Test2");
+            var store = new Store<object>();
 
             var entities = new Entity<object>[] { 
                 new Entity<object>(null, new Dictionary<string, object>() { 
