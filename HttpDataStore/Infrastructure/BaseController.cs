@@ -1,23 +1,23 @@
 ﻿
+using HttpDataStore.StorageEngine;
 using System.Web;
 using System.Web.Http;
-using HttpDataStore.StorageEngine;
 namespace HttpDataStore.Infrastructure
 {
     public class BaseController : ApiController
     {
-        private readonly IStoreData<object> dataStore;
+        private readonly StoreRepository storeRepository;
 
         public BaseController()
         {
-            dataStore = HttpContext.Current.Application["DataStore"] as IStoreData<object>;
+            storeRepository = HttpContext.Current.Application["StoreRepository"] as StoreRepository;
         }
 
-        protected IStoreData<object> DataStore
+        protected StoreRepository Store
         {
             get
             {
-                return dataStore;
+                return storeRepository;
             }
         }
     }

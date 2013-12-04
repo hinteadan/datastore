@@ -10,7 +10,7 @@ namespace HttpDataStore.Controllers
     {
         public KeyValuePair<Guid, Dictionary<string, object>>[] Get(string storeName)
         {
-            return new QueryDataStore(DataStore).QueryMeta(Request.RequestUri.ParseQueryString());
+            return new QueryDataStore(Store.On(storeName)).QueryMeta(Request.RequestUri.ParseQueryString());
         }
 
         public HttpResponseMessage Options()

@@ -16,14 +16,14 @@ namespace HttpDataStore.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.RequestEntityTooLarge);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, new QueryDataStore(DataStore).Query(queryString));
+            return Request.CreateResponse(HttpStatusCode.OK, new QueryDataStore(Store.On(storeName)).Query(queryString));
         }
 
         public HttpResponseMessage Get(Guid id, string storeName)
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, DataStore.Load(id));
+                return Request.CreateResponse(HttpStatusCode.OK, Store.On(storeName).Load(id));
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -33,13 +33,13 @@ namespace HttpDataStore.Controllers
 
         public HttpResponseMessage Put(Entity<object> data, string storeName)
         {
-            DataStore.Save(data);
+            Store.On(storeName).Save(data);
             return Request.CreateResponse(HttpStatusCode.OK, data.Id);
         }
 
         public HttpResponseMessage Delete(Guid id, string storeName)
         {
-            DataStore.Delete(id);
+            Store.On(storeName).Delete(id);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
