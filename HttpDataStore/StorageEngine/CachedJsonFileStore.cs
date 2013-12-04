@@ -17,8 +17,14 @@ namespace HttpDataStore.StorageEngine
             cache = new MemoryCache(cacheRepositoryId.ToString());
         }
 
-        public CachedJsonFileStore(string storeDirectoryPath)
-            : base(storeDirectoryPath)
+        public CachedJsonFileStore(string storeName)
+            : base(storeName)
+        {
+            cache = new MemoryCache(cacheRepositoryId.ToString());
+        }
+
+        public CachedJsonFileStore(string storeBasePath, string storeName)
+            : base(storeBasePath, storeName)
         {
             cache = new MemoryCache(cacheRepositoryId.ToString());
         }

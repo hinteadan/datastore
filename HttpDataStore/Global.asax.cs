@@ -1,5 +1,5 @@
-﻿using System.Web.Http;
-using HttpDataStore.StorageEngine;
+﻿using HttpDataStore.StorageEngine;
+using System.Web.Http;
 
 namespace HttpDataStore
 {
@@ -10,7 +10,7 @@ namespace HttpDataStore
     {
         protected void Application_Start()
         {
-            this.Context.Application["DataStore"] = new CachedJsonFileStore();
+            this.Context.Application["DataStore"] = new StoreRepository(storeName => new CachedJsonFileStore(storeName));
             WebApiConfig.Register(GlobalConfiguration.Configuration);
         }
     }

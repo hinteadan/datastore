@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HttpDataStore.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using HttpDataStore.Model;
-using Newtonsoft.Json;
 
 namespace HttpDataStore.StorageEngine
 {
@@ -14,13 +14,12 @@ namespace HttpDataStore.StorageEngine
         private readonly string metaStoreFilePath;
         protected readonly Dictionary<Guid, Dictionary<string, object>> metaStore;
 
-        public JsonFileStore()
+        public JsonFileStore() : this(null) { }
+        public JsonFileStore(string storeName)
         {
-            string path = ConfigurationManager.AppSettings["JsonFileStore.StorePath"];
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                path = string.Format("{0}JsonFileStore", AppDomain.CurrentDomain.BaseDirectory);
-            }
+            string basePath = ConfigurationManager.AppSettings["JsonFileStore.StorePath"] ??
+                string.Format("{0}JsonFileStore", AppDomain.CurrentDomain.BaseDirectory);
+            string path = string.IsNullOrWhiteSpace(storeName) ? basePath : string.Format("{0}\\{1}", basePath, storeName);
 
             this.storeDirectory = new DirectoryInfo(path);
             if (!storeDirectory.Exists)
@@ -31,14 +30,14 @@ namespace HttpDataStore.StorageEngine
             metaStore = InitializeMetaStore();
         }
 
-        public JsonFileStore(string storeDirectoryPath)
+        public JsonFileStore(string storeBasePath, string storeName)
         {
-            if (string.IsNullOrWhiteSpace(storeDirectoryPath))
+            if (string.IsNullOrWhiteSpace(storeBasePath))
             {
-                throw new ArgumentException("Paramter cannot be null or empty", "storeDirectoryPath");
+                throw new ArgumentException("Parameter cannot be null or empty", "storeDirectoryPath");
             }
-
-            this.storeDirectory = new DirectoryInfo(storeDirectoryPath);
+            string path = string.IsNullOrWhiteSpace(storeName) ? storeBasePath : string.Format("{0}\\{1}", storeBasePath, storeName);
+            this.storeDirectory = new DirectoryInfo(path);
             if (!storeDirectory.Exists)
             {
                 storeDirectory.Create();
