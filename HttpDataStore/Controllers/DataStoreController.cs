@@ -1,9 +1,9 @@
-﻿using System;
+﻿using HttpDataStore.Infrastructure;
+using HttpDataStore.Model;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using HttpDataStore.Infrastructure;
-using HttpDataStore.Model;
 
 namespace HttpDataStore.Controllers
 {
@@ -21,12 +21,14 @@ namespace HttpDataStore.Controllers
 
         public HttpResponseMessage Get(Guid id)
         {
-            var entity = DataStore.Load(id);
-            if(entity == null)
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, DataStore.Load(id));
+            }
+            catch (System.IO.FileNotFoundException)
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
         public HttpResponseMessage Put(Entity<object> data)
