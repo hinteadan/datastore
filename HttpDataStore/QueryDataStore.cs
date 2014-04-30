@@ -63,6 +63,10 @@ namespace HttpDataStore
                     return metaValue.IsHigherThan(queryParameter.Value);
                 case QueryParameterOperator.HigherThanOrEqual:
                     return metaValue.IsHigherThanOrEqual(queryParameter.Value);
+                case QueryParameterOperator.LowerThan:
+                    return metaValue.IsLowerThan(queryParameter.Value);
+                case QueryParameterOperator.LowerThanOrEqual:
+                    return metaValue.IsLowerThanOrEqual(queryParameter.Value);
                 default:
                     throw new NotImplementedException(string.Format("Operator <{0}> is not implemented", queryParameter.Operator));
             }

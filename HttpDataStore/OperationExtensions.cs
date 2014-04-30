@@ -34,6 +34,24 @@ namespace HttpDataStore
                 );
         }
 
+        internal static bool IsLowerThan(this object valueA, object valueB)
+        {
+            return Operate(valueA, valueB,
+                (a, b) => a < b,
+                (a, b) => a < b,
+                (a, b) => string.CompareOrdinal(a, b) < 0
+                );
+        }
+
+        internal static bool IsLowerThanOrEqual(this object valueA, object valueB)
+        {
+            return Operate(valueA, valueB,
+                (a, b) => a < b,
+                (a, b) => a < b,
+                (a, b) => string.CompareOrdinal(a, b) <= 0
+                );
+        }
+
         private static bool IsNumber(object value)
         {
             return value is sbyte
