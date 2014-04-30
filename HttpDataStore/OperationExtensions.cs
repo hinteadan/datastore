@@ -52,6 +52,33 @@ namespace HttpDataStore
                 );
         }
 
+        internal static bool IsContaining(this object valueA, object valueB)
+        {
+            return Operate(valueA, valueB,
+                (a, b) => a.ToString().Contains(b.ToString()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
+                (a, b) => a.Contains(b)
+                );
+        }
+
+        internal static bool IsStartingWith(this object valueA, object valueB)
+        {
+            return Operate(valueA, valueB,
+                (a, b) => a.ToString().StartsWith(b.ToString()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
+                (a, b) => a.StartsWith(b)
+                );
+        }
+
+        internal static bool IsEndingWith(this object valueA, object valueB)
+        {
+            return Operate(valueA, valueB,
+                (a, b) => a.ToString().EndsWith(b.ToString()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
+                (a, b) => a.EndsWith(b)
+                );
+        }
+
         private static bool IsNumber(object value)
         {
             return value is sbyte
