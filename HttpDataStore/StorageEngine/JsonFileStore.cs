@@ -126,9 +126,12 @@ namespace HttpDataStore.StorageEngine
             var exsitingEntity = Load(entity.Id);
             if (exsitingEntity == null)
             {
+                entity.PinAlterPoint();
                 return;
             }
             exsitingEntity.ValidateAlterOperation(entity);
+            exsitingEntity.PinAlterPoint();
+            entity.PinAlterPoint();
         }
     }
 }

@@ -46,12 +46,20 @@ namespace HttpDataStore.Model
                 EnsureCheckTag();
                 return checkTag;
             }
+            private set
+            {
+                checkTag = value;
+            }
         }
         public DateTime LastModifiedOn
         {
             get
             {
                 return lastModifiedOn;
+            }
+            private set
+            {
+                lastModifiedOn = value;
             }
         }
         public Dictionary<string, object> Meta { get; private set; }

@@ -99,7 +99,7 @@ namespace HttpDataStore
             Func<DateTime, DateTime, bool> dtime,
             Func<string, string, bool> str)
         {
-            if (IsNumber(a)) return num((decimal)a, (decimal)b);
+            if (IsNumber(a)) return num(Convert.ToDecimal(a), Convert.ToDecimal(b));
             if (a is DateTime) return dtime((DateTime)a, (DateTime)b);
             if (a is string) return str((string)a, (string)b);
             throw new NotSupportedException("Only these types are supported: numeric, DateTime and string");
