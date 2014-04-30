@@ -12,6 +12,7 @@ namespace HttpDataStore.StorageEngine
 
         public Entity<object> Save(Entity<object> data)
         {
+            ValidateAlterOperationFor(data);
             dataStore[data.Id] = data;
             metaStore[data.Id] = data.Meta;
             return data;
@@ -37,6 +38,16 @@ namespace HttpDataStore.StorageEngine
         public IEnumerable<KeyValuePair<Guid, Dictionary<string, object>>> QueryMeta(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
             return metaStore.Where(e => metaDataPredicate(e.Value)).ToArray();
+        }
+
+        private void ValidateAlterOperationFor(Entity<object> entity)
+        {
+            var exsitingEntity = Load(entity.Id);
+            if(exsitingEntity == null)
+            {
+                return;
+            }
+            exsitingEntity.ValidateAlterOperation(entity);
         }
     }
 }

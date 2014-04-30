@@ -31,8 +31,9 @@ namespace HttpDataStore.StorageEngine
 
         public override Entity<object> Save(Entity<object> data)
         {
+            ValidateAlterOperationFor(data);
             cache.Set(data.Id.ToString(), data, new CacheItemPolicy());
-            return base.Save(data);
+            return base.SaveWithoutAlterValidation(data);
         }
 
         public override Entity<object> Load(Guid id)
@@ -50,6 +51,16 @@ namespace HttpDataStore.StorageEngine
         {
             cache.Remove(id.ToString());
             base.Delete(id);
+        }
+
+        private void ValidateAlterOperationFor(Entity<object> entity)
+        {
+            var exsitingEntity = Load(entity.Id);
+            if (exsitingEntity == null)
+            {
+                return;
+            }
+            exsitingEntity.ValidateAlterOperation(entity);
         }
     }
 }

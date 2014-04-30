@@ -48,6 +48,12 @@ namespace HttpDataStore.StorageEngine
 
         public virtual Entity<object> Save(Entity<object> data)
         {
+            ValidateAlterOperationFor(data);
+            return SaveWithoutAlterValidation(data);
+        }
+
+        protected Entity<object> SaveWithoutAlterValidation(Entity<object> data)
+        {
             File.WriteAllText(
                 GenerateDataFilePath(data.Id),
                 JsonConvert.SerializeObject(data)
@@ -110,6 +116,16 @@ namespace HttpDataStore.StorageEngine
             return JsonConvert.DeserializeObject<Dictionary<Guid, Dictionary<string, object>>>(
                 File.ReadAllText(metaStoreFilePath)
                 );
+        }
+
+        private void ValidateAlterOperationFor(Entity<object> entity)
+        {
+            var exsitingEntity = Load(entity.Id);
+            if (exsitingEntity == null)
+            {
+                return;
+            }
+            exsitingEntity.ValidateAlterOperation(entity);
         }
     }
 }
