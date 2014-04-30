@@ -34,7 +34,7 @@ namespace HttpDataStore.Controllers
         public HttpResponseMessage Put(Entity<object> data, string storeName)
         {
             Store.On(storeName).Save(data);
-            return Request.CreateResponse(HttpStatusCode.OK, data.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
         public HttpResponseMessage Delete(Guid id, string storeName)
