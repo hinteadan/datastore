@@ -58,7 +58,7 @@ namespace HttpDataStore
             switch (queryParameter.Operator)
             {
                 case QueryParameterOperator.Equals:
-                    return metaValue.Equals(queryParameter.Value);
+                    return metaValue.IsEqualTo(queryParameter.Value);
                 case QueryParameterOperator.HigherThan:
                     return metaValue.IsHigherThan(queryParameter.Value);
                 case QueryParameterOperator.HigherThanOrEqual:

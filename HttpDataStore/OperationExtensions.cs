@@ -7,6 +7,11 @@ namespace HttpDataStore
 {
     internal static class OperationExtensions
     {
+        internal static bool IsEqualTo(this object valueA, object valueB)
+        {
+            return Convert.ToDecimal(valueA) == Convert.ToDecimal(valueB);
+        }
+
         internal static bool IsHigherThan(this object valueA, object valueB)
         {
             return Convert.ToDecimal(valueA) > Convert.ToDecimal(valueB);
