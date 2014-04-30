@@ -65,9 +65,12 @@ namespace HttpDataStore.StorageEngine
 
         public virtual Entity<object> Load(Guid id)
         {
-            return JsonConvert.DeserializeObject<Entity<object>>(
-                File.ReadAllText(GenerateDataFilePath(id))
-                );
+            string filePath = GenerateDataFilePath(id);
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+            return JsonConvert.DeserializeObject<Entity<object>>(File.ReadAllText(filePath));
         }
 
         public virtual IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)

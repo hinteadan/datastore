@@ -38,7 +38,16 @@ namespace HttpDataStore.StorageEngine
 
         public override Entity<object> Load(Guid id)
         {
-            return (cache.AddOrGetExisting(id.ToString(), base.Load(id), new CacheItemPolicy()) ?? cache[id.ToString()]) as Entity<object>;
+            if (cache.Contains(id.ToString()))
+            {
+                return cache[id.ToString()] as Entity<object>;
+            }
+            var entity = base.Load(id);
+            if (entity != null)
+            {
+                cache.Add(id.ToString(), entity, new CacheItemPolicy());
+            }
+            return entity;
         }
 
         public override IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
