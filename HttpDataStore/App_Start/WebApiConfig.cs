@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using HttpDataStore.StorageEngine;
 
 namespace HttpDataStore
 {
@@ -11,6 +12,12 @@ namespace HttpDataStore
                 name: "MetaApi",
                 routeTemplate: "meta/{storeName}",
                 defaults: new { controller = "DataStoreMeta", storeName = "Default", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "BlobApi",
+                routeTemplate: "blob/{id}",
+                defaults: new { controller = "Blob", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(

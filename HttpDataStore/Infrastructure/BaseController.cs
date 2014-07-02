@@ -20,5 +20,13 @@ namespace HttpDataStore.Infrastructure
                 return storeRepository;
             }
         }
+
+        protected IStoreData<object> BlobStore
+        {
+            get
+            {
+                return storeRepository.BlobStore;
+            }
+        }
     }
 }
