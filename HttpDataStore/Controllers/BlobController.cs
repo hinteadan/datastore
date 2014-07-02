@@ -42,7 +42,7 @@ namespace HttpDataStore.Controllers
             {
                 await Request.Content.ReadAsMultipartAsync(provider);
 
-                var entities = GenerateEntities(provider);
+                var entities = GenerateEntitiesAndRenameBlobs(provider).ToArray();
 
                 foreach (var entity in entities)
                 {
@@ -66,18 +66,21 @@ namespace HttpDataStore.Controllers
             Directory.CreateDirectory(blobsFolderPath);
         }
 
-        private IEnumerable<Entity<object>> GenerateEntities(MultipartFormDataStreamProvider provider) 
+        private IEnumerable<Entity<object>> GenerateEntitiesAndRenameBlobs(MultipartFormDataStreamProvider provider) 
         {
             var commonMeta = provider.FormData.AllKeys.ToDictionary(k => k, k => (object)string.Join(",", provider.FormData.GetValues(k)));
 
             foreach (var file in provider.FileData)
             {
+                string originalFileName = file.Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
+                string originalFileExtension = originalFileName.Substring(originalFileName.LastIndexOf('.') + 1);
                 FileInfo fileInfo = new FileInfo(file.LocalFileName);
                 var entity = new Entity<object>(null, new Dictionary<string, object>(commonMeta));
                 entity.Meta.Add("HDS-CreationTime", fileInfo.CreationTime);
-                entity.Meta.Add("HDS-Extension", fileInfo.Extension);
+                entity.Meta.Add("HDS-Extension", originalFileExtension);
                 entity.Meta.Add("HDS-Length", fileInfo.Length);
-                entity.Meta.Add("HDS-Name", fileInfo.Name);
+                entity.Meta.Add("HDS-Name", originalFileName);
+                fileInfo.MoveTo(string.Format("{0}\\{1}", blobsFolderPath, entity.Id.ToString()));
                 yield return entity;
             }
         }

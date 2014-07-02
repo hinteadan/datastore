@@ -9,25 +9,7 @@ namespace HttpDataStore.Tester
     {
         static void Main(string[] args)
         {
-            var store = new Store<object>();
-
-            var entities = new Entity<object>[] { 
-                new Entity<object>(null, new Dictionary<string, object>() { 
-                    { "Name", "Dummy1" },
-                    { "Time", DateTime.Today }
-                })
-            };
-
-            store.Save(entities[0]);
-
-            var queryResult = store.QueryMeta(
-                new QueryParameter { Name = "Time", Value = DateTime.Today }
-                );
-
-            queryResult = store.QueryMeta();
-
-            Console.WriteLine("Query response content:\r\n{0}", queryResult);
-            store.Delete(entities[0].Id);
+            new BlobStore("http://localhost/HDataStore/").Save(@"C:\WORK\ev\Docs\arch\iview-main.png");
 
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
