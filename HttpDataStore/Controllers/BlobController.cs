@@ -94,8 +94,7 @@ namespace HttpDataStore.Controllers
         {
             try
             {
-                var entity = BlobStore.Load(id);
-                var path = string.Format("{0}\\{1}", this.blobsFolderPath, entity.Meta["HDS-Name"]);
+                var path = string.Format("{0}\\{1}", this.blobsFolderPath, id);
                 HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
                 response.Content = new StreamContent(new FileStream(path, FileMode.Open));
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
