@@ -12,7 +12,7 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a == b,
                 (a, b) => a == b,
-                (a, b) => a == b
+                (a, b) => a.ToLowerInvariant() == b.ToLowerInvariant()
                 );
         }
 
@@ -57,7 +57,7 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().Contains(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.Contains(b)
+                (a, b) => a.ToLowerInvariant().Contains(b.ToLowerInvariant())
                 );
         }
 
@@ -66,7 +66,7 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().StartsWith(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.StartsWith(b)
+                (a, b) => a.ToLowerInvariant().StartsWith(b.ToLowerInvariant())
                 );
         }
 
@@ -75,7 +75,7 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().EndsWith(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.EndsWith(b)
+                (a, b) => a.ToLowerInvariant().EndsWith(b.ToLowerInvariant())
                 );
         }
 
