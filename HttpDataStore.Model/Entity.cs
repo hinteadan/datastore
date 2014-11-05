@@ -8,23 +8,24 @@ namespace HttpDataStore.Model
         Guid id, checkTag;
         DateTime lastModifiedOn = DateTime.MinValue;
 
-        public Entity(Guid id, T data, Dictionary<string, object> meta)
+        public Entity(Guid id, T data, Dictionary<string, object> meta, Guid checkTag)
         {
             this.Id = id;
             this.Data = data;
             this.Meta = meta;
+            this.checkTag = checkTag;
         }
         public Entity()
-            : this(Guid.NewGuid(), default(T), new Dictionary<string, object>())
+            : this(Guid.NewGuid(), default(T), new Dictionary<string, object>(), Guid.NewGuid())
         { }
         public Entity(T data)
-            : this(Guid.NewGuid(), data, new Dictionary<string, object>())
+            : this(Guid.NewGuid(), data, new Dictionary<string, object>(), Guid.NewGuid())
         { }
         public Entity(Guid id, T data)
-            : this(id, data, new Dictionary<string, object>())
+            : this(id, data, new Dictionary<string, object>(), Guid.NewGuid())
         { }
         public Entity(T data, Dictionary<string, object> meta)
-            : this(Guid.NewGuid(), data, meta)
+            : this(Guid.NewGuid(), data, meta, Guid.NewGuid())
         { }
 
 
@@ -46,7 +47,7 @@ namespace HttpDataStore.Model
                 EnsureCheckTag();
                 return checkTag;
             }
-            private set
+            set
             {
                 checkTag = value;
             }
