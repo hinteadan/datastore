@@ -11,6 +11,7 @@ namespace HttpDataStore
     public class QueryDataStore
     {
         private readonly IStoreData<object> dataStore;
+        private const string noValidKeys = "NoValidKeys";
 
         public QueryDataStore(IStoreData<object> dataStore)
         {
@@ -39,7 +40,8 @@ namespace HttpDataStore
             {
                 case ChainOperation.And:
                     return meta => queryParams.AllKeys.Where(k => meta.ContainsKey(k) && k != "chainWith" && !string.IsNullOrWhiteSpace(k))
-                        .All(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
+                        .DefaultIfEmpty(noValidKeys)
+                        .All(k => k == noValidKeys ? false : CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
                 case ChainOperation.Or:
                     return meta => queryParams.AllKeys.Where(k => meta.ContainsKey(k) && k != "chainWith" && !string.IsNullOrWhiteSpace(k))
                         .Any(k => CheckQueryCondition(meta[k], QueryParameter.Parse(k, queryParams[k])));
