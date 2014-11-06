@@ -12,7 +12,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a == b,
                 (a, b) => a == b,
-                (a, b) => a.ToLowerInvariant() == b.ToLowerInvariant()
+                (a, b) => a.ToLowerInvariant() == b.ToLowerInvariant(),
+                (a, b) => a == b
                 );
         }
 
@@ -21,7 +22,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a > b,
                 (a, b) => a > b,
-                (a, b) => string.CompareOrdinal(a, b) > 0
+                (a, b) => string.CompareOrdinal(a, b) > 0,
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -30,7 +32,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a > b,
                 (a, b) => a > b,
-                (a, b) => string.CompareOrdinal(a, b) >= 0
+                (a, b) => string.CompareOrdinal(a, b) >= 0,
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -39,7 +42,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a < b,
                 (a, b) => a < b,
-                (a, b) => string.CompareOrdinal(a, b) < 0
+                (a, b) => string.CompareOrdinal(a, b) < 0,
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -48,7 +52,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a < b,
                 (a, b) => a < b,
-                (a, b) => string.CompareOrdinal(a, b) <= 0
+                (a, b) => string.CompareOrdinal(a, b) <= 0,
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -57,7 +62,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().Contains(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.ToLowerInvariant().Contains(b.ToLowerInvariant())
+                (a, b) => a.ToLowerInvariant().Contains(b.ToLowerInvariant()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -66,7 +72,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().StartsWith(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.ToLowerInvariant().StartsWith(b.ToLowerInvariant())
+                (a, b) => a.ToLowerInvariant().StartsWith(b.ToLowerInvariant()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -75,7 +82,8 @@ namespace HttpDataStore
             return Operate(valueA, valueB,
                 (a, b) => a.ToString().EndsWith(b.ToString()),
                 (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); },
-                (a, b) => a.ToLowerInvariant().EndsWith(b.ToLowerInvariant())
+                (a, b) => a.ToLowerInvariant().EndsWith(b.ToLowerInvariant()),
+                (a, b) => { throw new InvalidOperationException("This operation cannot be performed on DateTimes"); }
                 );
         }
 
@@ -97,12 +105,14 @@ namespace HttpDataStore
         private static bool Operate(object a, object b,
             Func<decimal, decimal, bool> num,
             Func<DateTime, DateTime, bool> dtime,
-            Func<string, string, bool> str)
+            Func<string, string, bool> str,
+            Func<bool, bool, bool> bl)
         {
             if (IsNumber(a)) return num(Convert.ToDecimal(a), Convert.ToDecimal(b));
             if (a is DateTime) return dtime((DateTime)a, (DateTime)b);
             if (a is string) return str((string)a, (string)b);
-            throw new NotSupportedException("Only these types are supported: numeric, DateTime and string");
+            if (a is bool) return bl((bool)a, (bool)b);
+            throw new NotSupportedException("Only these types are supported: numeric, DateTime, Boolean and string");
         }
     }
 }
