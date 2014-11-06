@@ -58,12 +58,12 @@ namespace HttpDataStore.Model
             {
                 return lastModifiedOn;
             }
-            private set
+            set
             {
                 lastModifiedOn = value;
             }
         }
-        public Dictionary<string, object> Meta { get; private set; }
+        public Dictionary<string, object> Meta { get; set; }
         public T Data { get; set; }
 
         private void EnsureCheckTag()
