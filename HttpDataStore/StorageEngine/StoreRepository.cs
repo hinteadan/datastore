@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 namespace HttpDataStore.StorageEngine
 {
@@ -7,8 +8,8 @@ namespace HttpDataStore.StorageEngine
     {
         public const string BlobStoreName = "Blobs";
         private readonly Func<string, IStoreData<object>> defaultFactory;
-        private readonly Dictionary<string, IStoreData<object>> store = new Dictionary<string, IStoreData<object>>();
-        private readonly Dictionary<string, Func<string, IStoreData<object>>> storeFactory = new Dictionary<string, Func<string, IStoreData<object>>>();
+        private readonly ConcurrentDictionary<string, IStoreData<object>> store = new ConcurrentDictionary<string, IStoreData<object>>();
+        private readonly ConcurrentDictionary<string, Func<string, IStoreData<object>>> storeFactory = new ConcurrentDictionary<string, Func<string, IStoreData<object>>>();
 
         public StoreRepository(Func<string, IStoreData<object>> defaultFactory)
         {
@@ -62,7 +63,7 @@ namespace HttpDataStore.StorageEngine
             }
 
             var factory = storeFactory.ContainsKey(storeName) ? storeFactory[storeName] : defaultFactory;
-            store.Add(storeName, factory(storeName));
+            store.TryAdd(storeName, factory(storeName));
         }
     }
 }
