@@ -25,6 +25,7 @@ namespace HttpDataStore.Client
     {
         public string Name { get; set; }
         public QueryParameterOperator Operator { get; set; }
+        public bool IsNegated { get; set; }
         public object Value { get; set; }
 
         public override string ToString()
@@ -41,10 +42,20 @@ namespace HttpDataStore.Client
                 throw new FormatException(string.Format("The query condition '{0}' has an invalid format. It should be '<Operator>:<Value>'"));
             }
 
+            string op = parts[0];
+            bool isNegated = false;
+
+            if (parts[0][0] != '!')
+            {
+                isNegated = true;
+                op = parts[0].Substring(1);
+            }
+
             return new QueryParameter
             {
                 Name = name,
-                Operator = (QueryParameterOperator)Enum.Parse(typeof(QueryParameterOperator), parts[0], true),
+                Operator = (QueryParameterOperator)Enum.Parse(typeof(QueryParameterOperator), op, true),
+                IsNegated = isNegated,
                 Value = ParseValue(parts[1])
             };
         }
