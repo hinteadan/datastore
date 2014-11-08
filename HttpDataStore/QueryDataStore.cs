@@ -57,27 +57,38 @@ namespace HttpDataStore
                 return true;
             }
 
+            bool result;
+
             switch (queryParameter.Operator)
             {
                 case QueryParameterOperator.Equals:
-                    return metaValue.IsEqualTo(queryParameter.Value);
+                    result = metaValue.IsEqualTo(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.HigherThan:
-                    return metaValue.IsHigherThan(queryParameter.Value);
+                    result = metaValue.IsHigherThan(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.HigherThanOrEqual:
-                    return metaValue.IsHigherThanOrEqual(queryParameter.Value);
+                    result = metaValue.IsHigherThanOrEqual(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.LowerThan:
-                    return metaValue.IsLowerThan(queryParameter.Value);
+                    result = metaValue.IsLowerThan(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.LowerThanOrEqual:
-                    return metaValue.IsLowerThanOrEqual(queryParameter.Value);
+                    result = metaValue.IsLowerThanOrEqual(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.Contains:
-                    return metaValue.IsContaining(queryParameter.Value);
+                    result = metaValue.IsContaining(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.BeginsWith:
-                    return metaValue.IsStartingWith(queryParameter.Value);
+                    result = metaValue.IsStartingWith(queryParameter.Value);
+                    break;
                 case QueryParameterOperator.EndsWith:
-                    return metaValue.IsEndingWith(queryParameter.Value);
+                    result = metaValue.IsEndingWith(queryParameter.Value);
+                    break;
                 default:
                     throw new NotImplementedException(string.Format("Operator <{0}> is not implemented", queryParameter.Operator));
             }
+            return !queryParameter.IsNegated ? result : !result;
 
         }
     }
