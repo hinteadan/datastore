@@ -45,7 +45,7 @@ namespace HttpDataStore.Client
             string op = parts[0];
             bool isNegated = false;
 
-            if (parts[0][0] != '!')
+            if (parts[0][0] == '!')
             {
                 isNegated = true;
                 op = parts[0].Substring(1);
