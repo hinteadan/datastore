@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace HttpDataStore.Tester
 {
@@ -23,21 +26,75 @@ namespace HttpDataStore.Tester
 
             string[] properties = ParseProperties(lines[0], propertyMapper);
 
+            List<Dictionary<string, dynamic>> jsonPayload = new List<Dictionary<string, dynamic>>(lines.Length - 1);
+
+            foreach (string line in lines.Skip(1))
+            {
+                Dictionary<string, dynamic> entry = new Dictionary<string, dynamic>();
+
+                int propertyIndex = 0;
+                foreach (string value in CleanCsvEntry(SplitCsvLine(line)))
+                {
+                    string property = properties[propertyIndex];
+                    entry[property] = customValueMappers.ContainsKey(property) ? customValueMappers[property](value) : ParseValue(value);
+                    propertyIndex++;
+                }
+
+                jsonPayload.Add(entry);
+            }
+
+            File.WriteAllText(jsonPath, JsonConvert.SerializeObject(jsonPayload, Formatting.Indented));
+
+        }
+
+        private static dynamic ParseValue(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            bool asBool;
+            decimal asNumber;
+            DateTime asDate;
+            if (bool.TryParse(value, out asBool)) return asBool;
+            if (decimal.TryParse(value, out asNumber)) return asNumber;
+            if (DateTime.TryParse(value, out asDate)) return asDate;
+            return value;
         }
 
         private static string[] ParseProperties(string csvColumns, Dictionary<string, string> propertyMapper)
         {
-            return CleanColumnNames(csvColumns.Split(','))
+            return CleanCsvEntry(SplitCsvLine(csvColumns))
                 .Select(column => propertyMapper.ContainsKey(column) ? propertyMapper[column] : column)
                 .ToArray();
 
         }
 
-        private static string[] CleanColumnNames(string[] csvColumns)
+        private static string[] SplitCsvLine(string line)
         {
-            return csvColumns.Select(column => {
+            Regex splitter = new Regex("(?:^|,)(?=[^\"]|(\")?)\"?((?(1)[^\"]*|[^,\"]*))\"?(?=,|$)");
+            var matches = splitter.Matches(line);
+            List<string> values = new List<string>();
 
-                string clean = column;
+            for (var i = 0; i < matches.Count; i++ )
+            {
+                values.Add(matches[i].Groups[2].Value);
+            }
+
+            return values.ToArray();
+        }
+
+        private static string[] CleanCsvEntry(string[] csvEntries)
+        {
+            return csvEntries.Select(entry =>
+            {
+                if (string.IsNullOrWhiteSpace(entry))
+                {
+                    return null;
+                }
+
+                string clean = entry;
                 if (clean[0] == '"')
                 {
                     clean = clean.Substring(1);
