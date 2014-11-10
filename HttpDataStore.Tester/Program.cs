@@ -48,7 +48,7 @@ namespace HttpDataStore.Tester
                         return value.Split(' ').Select(v => v.Trim()).ToArray();
                     }
                 },
-            });
+            }, entry => string.IsNullOrWhiteSpace(entry["name"]));
         }
     }
 }

@@ -15,9 +15,13 @@ namespace HttpDataStore.Tester
     {
         public static void FromFile(string csvPath, string jsonPath)
         {
-            FromFile(csvPath, jsonPath, new Dictionary<string, string>(), new Dictionary<string, Func<string, dynamic>>());
+            FromFile(csvPath, jsonPath, new Dictionary<string, string>(), new Dictionary<string, Func<string, dynamic>>(), null);
         }
         public static void FromFile(string csvPath, string jsonPath, Dictionary<string, string> propertyMapper, Dictionary<string, Func<string, dynamic>> customValueMappers)
+        {
+            FromFile(csvPath, jsonPath, propertyMapper, customValueMappers, null);
+        }
+        public static void FromFile(string csvPath, string jsonPath, Dictionary<string, string> propertyMapper, Dictionary<string, Func<string, dynamic>> customValueMappers, Func<Dictionary<string, dynamic>, bool> excludeEntryPredicate)
         {
             string[] lines = File.ReadAllLines(csvPath);
             if (lines.Length == 0)
@@ -39,6 +43,11 @@ namespace HttpDataStore.Tester
                     string property = properties[propertyIndex];
                     entry[property] = customValueMappers.ContainsKey(property) ? customValueMappers[property](value) : ParseValue(value);
                     propertyIndex++;
+                }
+
+                if (excludeEntryPredicate != null && excludeEntryPredicate(entry))
+                {
+                    continue;
                 }
 
                 jsonPayload.Add(entry);
@@ -74,6 +83,10 @@ namespace HttpDataStore.Tester
 
         private static string[] SplitCsvLine(string line)
         {
+            if (line[0] == ',')
+            {
+                line = ' ' + line;
+            }
             Regex splitter = new Regex("(?:^|,)(?=[^\"]|(\")?)\"?((?(1)[^\"]*|[^,\"]*))\"?(?=,|$)");
             var matches = splitter.Matches(line);
             List<string> values = new List<string>();
