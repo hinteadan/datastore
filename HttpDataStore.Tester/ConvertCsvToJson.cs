@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace HttpDataStore.Tester
 
         }
 
-        private static dynamic ParseValue(string value)
+        public static dynamic ParseValue(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -58,8 +59,8 @@ namespace HttpDataStore.Tester
             decimal asNumber;
             DateTime asDate;
             if (bool.TryParse(value, out asBool)) return asBool;
-            if (decimal.TryParse(value, out asNumber)) return asNumber;
-            if (DateTime.TryParse(value, out asDate)) return asDate;
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out asNumber)) return asNumber;
+            if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.NoCurrentDateDefault, out asDate)) return asDate;
             return value;
         }
 
