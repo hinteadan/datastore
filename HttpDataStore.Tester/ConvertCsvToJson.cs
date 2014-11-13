@@ -87,13 +87,13 @@ namespace HttpDataStore.Tester
             {
                 line = ' ' + line;
             }
-            Regex splitter = new Regex("(?:^|,)(?=[^\"]|(\")?)\"?((?(1)[^\"]*|[^,\"]*))\"?(?=,|$)");
+            Regex splitter = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
             var matches = splitter.Matches(line);
             List<string> values = new List<string>();
 
             for (var i = 0; i < matches.Count; i++ )
             {
-                values.Add(matches[i].Groups[2].Value);
+                values.Add(matches[i].Groups[0].Value);
             }
 
             return values.ToArray();

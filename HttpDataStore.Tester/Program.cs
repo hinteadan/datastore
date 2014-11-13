@@ -12,7 +12,7 @@ namespace HttpDataStore.Tester
         {
             //new BlobStore("http://localhost/HDataStore/").Save(@"C:\WORK\ev\Docs\arch\iview-main.png");
 
-            ConvertHangOutPlacesCsvToJson(@"C:\Users\hinte_000\Downloads\Mobile app contest - Places.csv", @"C:\Users\hinte_000\Downloads\Mobile app contest - Places.json");
+            ConvertHangOutPlacesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.json");
             //ConvertHangOutActivitiesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.json");
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
@@ -34,7 +34,7 @@ namespace HttpDataStore.Tester
                         if(string.IsNullOrWhiteSpace(value)){
                             return null;
                         }
-                        dynamic[] parts = value.Split(' ').Select(p => ConvertCsvToJson.ParseValue(p.Trim())).ToArray();
+                        dynamic[] parts = value.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries).Select(p => ConvertCsvToJson.ParseValue(p.Trim())).ToArray();
                         return new {
                             lat = (decimal)parts[0],
                             lng = (decimal)parts[1],
