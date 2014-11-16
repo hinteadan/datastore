@@ -12,8 +12,8 @@ namespace HttpDataStore.Tester
         {
             //new BlobStore("http://localhost/HDataStore/").Save(@"C:\WORK\ev\Docs\arch\iview-main.png");
 
-            ConvertHangOutPlacesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.json");
-            //ConvertHangOutActivitiesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.json");
+            ConvertHangOutPlacesCsvToJson(@"C:\Users\hinte_000\Downloads\Mobile app contest - Places.csv", @"C:\Users\hinte_000\Downloads\Mobile app contest - Places.json");
+            ConvertHangOutActivitiesCsvToJson(@"C:\Users\hinte_000\Downloads\Mobile app contest - Activities.csv", @"C:\Users\hinte_000\Downloads\Mobile app contest - Activities.json");
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
         }
@@ -61,6 +61,7 @@ namespace HttpDataStore.Tester
                 { "Description", "description" },
                 { "Tags (space separated - used to link activity to place)", "tags" },
                 { "Picture", "imageUrl" },
+                { "Activity Logo", "logoUrl" }
             }, new Dictionary<string, Func<string, dynamic>> { 
                 { "keywords", value => 
                     {
