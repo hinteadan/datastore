@@ -12,8 +12,8 @@ namespace HttpDataStore.Tester
         {
             //new BlobStore("http://localhost/HDataStore/").Save(@"C:\WORK\ev\Docs\arch\iview-main.png");
 
-            ConvertHangOutPlacesCsvToJson(@"C:\Users\hinte_000\Downloads\Mobile app contest - Places.csv", @"C:\Users\hinte_000\Downloads\Mobile app contest - Places.json");
-            ConvertHangOutActivitiesCsvToJson(@"C:\Users\hinte_000\Downloads\Mobile app contest - Activities.csv", @"C:\Users\hinte_000\Downloads\Mobile app contest - Activities.json");
+            ConvertHangOutPlacesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.json");
+            ConvertHangOutActivitiesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.json");
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
         }
@@ -56,13 +56,21 @@ namespace HttpDataStore.Tester
         {
             ConvertCsvToJson.FromFile(csvFile, jsonFile, new Dictionary<string, string>{
                 { "Title", "title" },
-                { "Category", "category" },
+                { "Category", "categories" },
                 { "Keywords (space separated)", "keywords" },
                 { "Description", "description" },
                 { "Tags (space separated - used to link activity to place)", "tags" },
                 { "Picture", "imageUrl" },
                 { "Activity Logo", "logoUrl" }
             }, new Dictionary<string, Func<string, dynamic>> { 
+                { "categories", value => 
+                    {
+                        if(string.IsNullOrWhiteSpace(value)){
+                            return new string[0];
+                        }
+                        return value.Split(' ').Where(v => !string.IsNullOrWhiteSpace(v)).Select(v => v.Trim().ToLowerInvariant()).Where(v => v != "activities").Distinct().ToArray();
+                    }
+                },
                 { "keywords", value => 
                     {
                         if (string.IsNullOrWhiteSpace(value))
