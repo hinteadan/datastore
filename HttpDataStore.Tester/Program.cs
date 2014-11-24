@@ -60,7 +60,7 @@ namespace HttpDataStore.Tester
                 { "Keywords (space separated)", "keywords" },
                 { "Description", "description" },
                 { "Tags (space separated - used to link activity to place)", "tags" },
-                { "Picture", "imageUrl" },
+                { "Picture", "imageUrls" },
                 { "Activity Logo", "logoUrl" }
             }, new Dictionary<string, Func<string, dynamic>> { 
                 { "categories", value => 
@@ -88,6 +88,14 @@ namespace HttpDataStore.Tester
                         return value.Split(' ').Where(v => !string.IsNullOrWhiteSpace(v)).Select(v => v.Trim()).ToArray();
                     }
                 },
+                { "imageUrls", value => 
+                    {
+                        if(string.IsNullOrWhiteSpace(value)){
+                            return new string[0];
+                        }
+                        return value.Split(' ').Where(v => !string.IsNullOrWhiteSpace(v)).Select(v => v.Trim()).ToArray();
+                    }
+                }
             }, entry => string.IsNullOrWhiteSpace(entry["title"]));
         }
     }
