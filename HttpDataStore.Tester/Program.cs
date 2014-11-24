@@ -14,8 +14,19 @@ namespace HttpDataStore.Tester
 
             ConvertHangOutPlacesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.json");
             ConvertHangOutActivitiesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Activities.json");
+            ConvertHangOutCategoriesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Activity categories.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Activity categories.json");
             Console.WriteLine("\r\nDone. Press key to exit.");
             Console.ReadKey();
+        }
+
+        private static void ConvertHangOutCategoriesCsvToJson(string csvFile, string jsonFile)
+        {
+            ConvertCsvToJson.FromFile(csvFile, jsonFile, new Dictionary<string, string>{
+                { "Category", "category" },
+                { "Image", "image" }
+            }, new Dictionary<string, Func<string, dynamic>> { 
+                { "category", value => value == null ? null : value.Replace("Activities", string.Empty).Trim().ToLowerInvariant() }
+            }, entry => string.IsNullOrWhiteSpace(entry["category"]) || string.IsNullOrWhiteSpace(entry["image"]) || entry["category"] == "good logo");
         }
 
         private static void ConvertHangOutPlacesCsvToJson(string csvFile, string jsonFile)
