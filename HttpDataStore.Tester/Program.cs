@@ -25,7 +25,7 @@ namespace HttpDataStore.Tester
                 { "Category", "category" },
                 { "Image", "image" }
             }, new Dictionary<string, Func<string, dynamic>> { 
-                { "category", value => value == null ? null : value.Replace("Activities", string.Empty).Trim().ToLowerInvariant() }
+                { "category", value => value == null ? null : value.ToLowerInvariant().Replace("activities", string.Empty).Trim().ToLowerInvariant() }
             }, entry => string.IsNullOrWhiteSpace(entry["category"]) || string.IsNullOrWhiteSpace(entry["image"]) || entry["category"] == "good logo");
         }
 
