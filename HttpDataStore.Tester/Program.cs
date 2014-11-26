@@ -23,10 +23,10 @@ namespace HttpDataStore.Tester
         {
             ConvertCsvToJson.FromFile(csvFile, jsonFile, new Dictionary<string, string>{
                 { "Category", "category" },
-                { "Image", "image" }
+                { "Images", "image" }
             }, new Dictionary<string, Func<string, dynamic>> { 
                 { "category", value => value == null ? null : value.ToLowerInvariant().Replace("activities", string.Empty).Trim().ToLowerInvariant() }
-            }, entry => string.IsNullOrWhiteSpace(entry["category"]) || string.IsNullOrWhiteSpace(entry["image"]) || entry["category"] == "good logo");
+            }, entry => string.IsNullOrWhiteSpace(entry["category"]) || string.IsNullOrWhiteSpace(entry["image"]));
         }
 
         private static void ConvertHangOutPlacesCsvToJson(string csvFile, string jsonFile)
