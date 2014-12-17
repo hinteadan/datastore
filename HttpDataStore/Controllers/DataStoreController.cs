@@ -33,7 +33,14 @@ namespace HttpDataStore.Controllers
 
         public HttpResponseMessage Put(Entity<object> data, string storeName)
         {
-            Store.On(storeName).Save(data);
+            try
+            {
+                Store.On(storeName).Save(data);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Conflict, ex);
+            }
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
