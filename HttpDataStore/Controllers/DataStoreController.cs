@@ -33,11 +33,7 @@ namespace HttpDataStore.Controllers
 
         public HttpResponseMessage Put(Entity<object> data, string storeName)
         {
-            bool isNew = data.LastModifiedOn == default(DateTime);
-            BroadcastPutOperation(
-                Store.On(storeName).Save(data),
-                isNew
-                );
+            Store.On(storeName).Save(data);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
@@ -50,18 +46,6 @@ namespace HttpDataStore.Controllers
         public HttpResponseMessage Options()
         {
             return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        private void BroadcastPutOperation(Entity<object> entity, bool isNew)
-        {
-            if (isNew)
-            {
-                Broadcast.EntityCreated(entity);
-            }
-            else
-            {
-                Broadcast.EntityChanged(entity);
-            }
         }
     }
 }
