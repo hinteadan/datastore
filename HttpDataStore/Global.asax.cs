@@ -1,5 +1,6 @@
 ﻿using HttpDataStore.StorageEngine;
 using System.Web.Http;
+using System.Web.Routing;
 
 namespace HttpDataStore
 {
@@ -11,7 +12,6 @@ namespace HttpDataStore
         protected void Application_Start()
         {
             this.Context.Application["StoreRepository"] = new StoreRepository(storeName => new CachedJsonFileStore(storeName));
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
         }
     }
 }
