@@ -30,6 +30,12 @@ namespace HttpDataStore
             );
 
             config.Routes.MapHttpRoute(
+                name: "ValidationApi",
+                routeTemplate: "validate",
+                defaults: new { controller = "Validation", storeName = "Default", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{storeName}/{id}",
                 defaults: new { controller = "DataStore", storeName = "Default", id = RouteParameter.Optional }

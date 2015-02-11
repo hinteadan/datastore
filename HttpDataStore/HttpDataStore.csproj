@@ -127,6 +127,7 @@
     <Compile Include="Controllers\BlobController.cs" />
     <Compile Include="Controllers\DataStoreController.cs" />
     <Compile Include="Controllers\DataStoreMetaController.cs" />
+    <Compile Include="Controllers\ValidationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

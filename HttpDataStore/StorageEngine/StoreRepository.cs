@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using HttpDataStore.Model;
 namespace HttpDataStore.StorageEngine
 {
     public class StoreRepository
     {
         public const string BlobStoreName = "Blobs";
+        public const string ValidationStoreName = "AwaitingValidation";
         private readonly Func<string, IStoreData<object>> defaultFactory;
         private readonly ConcurrentDictionary<string, IStoreData<object>> store = new ConcurrentDictionary<string, IStoreData<object>>();
         private readonly ConcurrentDictionary<string, Func<string, IStoreData<object>>> storeFactory = new ConcurrentDictionary<string, Func<string, IStoreData<object>>>();
@@ -22,6 +24,15 @@ namespace HttpDataStore.StorageEngine
             {
                 EnsureStore(BlobStoreName);
                 return store[BlobStoreName];
+            }
+        }
+
+        public IStoreData<object> ValidationStore
+        {
+            get
+            {
+                EnsureStore(ValidationStoreName);
+                return store[ValidationStoreName] as IStoreData<object>;
             }
         }
 
@@ -42,7 +53,8 @@ namespace HttpDataStore.StorageEngine
             {
                 throw new ArgumentException("Parameter storeName cannot be null or empty");
             }
-            if (storeName.Trim().Equals(BlobStoreName, StringComparison.InvariantCultureIgnoreCase))
+            string normalizedName = storeName.Trim();
+            if (normalizedName.Equals(BlobStoreName, StringComparison.InvariantCultureIgnoreCase) || normalizedName.Equals(ValidationStoreName, StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new ArgumentException("The given store name is reserved, please use another identifier");
             }

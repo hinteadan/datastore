@@ -2,6 +2,7 @@
 using HttpDataStore.StorageEngine;
 using System.Web;
 using System.Web.Http;
+using HttpDataStore.Model;
 namespace HttpDataStore.Infrastructure
 {
     public class BaseController : ApiController
@@ -28,6 +29,14 @@ namespace HttpDataStore.Infrastructure
             get
             {
                 return storeRepository.BlobStore;
+            }
+        }
+
+        protected IStoreData<object> ValidationStore
+        {
+            get
+            {
+                return storeRepository.ValidationStore;
             }
         }
 
