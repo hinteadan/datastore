@@ -17,6 +17,7 @@ namespace HttpDataStore.Client
 
     public enum ChainOperation
     {
+        None,
         And,
         Or
     }
