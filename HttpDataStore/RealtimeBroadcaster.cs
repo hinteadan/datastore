@@ -26,5 +26,10 @@ namespace HttpDataStore
         {
             entityHubContext.Clients.All.entityCreated(entity);
         }
+
+        public void EntityRemoved<T>(Entity<T> entity)
+        {
+            entityHubContext.Clients.All.entityRemoved(entity);
+        }
     }
 }

@@ -18,5 +18,10 @@ namespace HttpDataStore.Hubs
         {
             Clients.Others.entityCreated(entity);
         }
+
+        public void AnnounceEntityRemoved(Entity<object> entity)
+        {
+            Clients.Others.entityRemoved(entity);
+        }
     }
 }
