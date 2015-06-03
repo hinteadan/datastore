@@ -68,6 +68,7 @@ namespace HttpDataStore.Client
             DateTime asDateTime;
             bool asBool;
 
+            if (value == "null") return null;
             if (bool.TryParse(value, out asBool)) return asBool;
             if (int.TryParse(value, out asInt)) return asInt;
             if (decimal.TryParse(value, out asDecimal)) return asDecimal;

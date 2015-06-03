@@ -1,11 +1,11 @@
 ﻿
-using HttpDataStore.Client;
-using HttpDataStore.Model;
-using HttpDataStore.StorageEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using HttpDataStore.Client;
+using HttpDataStore.Model;
+using HttpDataStore.StorageEngine;
 namespace HttpDataStore
 {
     public class QueryDataStore
@@ -52,11 +52,6 @@ namespace HttpDataStore
 
         private bool CheckQueryCondition(object metaValue, QueryParameter queryParameter)
         {
-            if (metaValue == null)
-            {
-                return true;
-            }
-
             bool result;
 
             switch (queryParameter.Operator)

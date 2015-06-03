@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace HttpDataStore
 {
@@ -108,6 +105,7 @@ namespace HttpDataStore
             Func<string, string, bool> str,
             Func<bool, bool, bool> bl)
         {
+            if (a == null || b == null) return a == null && b == null;
             if (IsNumber(a)) return num(Convert.ToDecimal(a), Convert.ToDecimal(b));
             if (a is DateTime) return dtime((DateTime)a, (DateTime)b);
             if (a is string) return str((string)a, (string)b);
