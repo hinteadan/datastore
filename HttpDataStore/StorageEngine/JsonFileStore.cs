@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace HttpDataStore.StorageEngine
 {
@@ -103,6 +104,11 @@ namespace HttpDataStore.StorageEngine
 
         private void UpdateMetaFile()
         {
+            RunWithRetry(UpdateAndPersistMetadata, 30, TimeSpan.FromSeconds(1));
+        }
+
+        private void UpdateAndPersistMetadata()
+        {
             File.WriteAllText(
                 metaStoreFilePath,
                 JsonConvert.SerializeObject(metaStore)
@@ -132,6 +138,25 @@ namespace HttpDataStore.StorageEngine
             exsitingEntity.ValidateAlterOperation(entity);
             exsitingEntity.PinAlterPoint();
             entity.PinAlterPoint();
+        }
+
+        private void RunWithRetry(Action process, int maxRetries, TimeSpan retryInterval)
+        {
+            int count = 0;
+            while (count < maxRetries)
+            {
+                try
+                {
+                    count++;
+                    process();
+
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(retryInterval);
+                    continue;
+                }
+            }
         }
     }
 }
