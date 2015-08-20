@@ -10,16 +10,18 @@ namespace HttpDataStore.Tester
     {
         static void Main(string[] args)
         {
+            Azure.Run();
+
             //new BlobStore("http://localhost/HDataStore/").Save(@"C:\WORK\ev\Docs\arch\iview-main.png");
 
-            var entity = new Entity<string>("test, test, testicles", new Dictionary<string, object> { 
-                { "value", "test, test, testicles" },
-                { "length", "test, test, testicles".Length },
-            });
-            var validator = new Validation<string>();
+            //var entity = new Entity<string>("test, test, testicles", new Dictionary<string, object> { 
+            //    { "value", "test, test, testicles" },
+            //    { "length", "test, test, testicles".Length },
+            //});
+            //var validator = new Validation<string>();
 
-            var token = validator.QueueForValidation(entity, "validationTest", "123456");
-            var validEntity = validator.Validate(token, "123456");
+            //var token = validator.QueueForValidation(entity, "validationTest", "123456");
+            //var validEntity = validator.Validate(token, "123456");
 
 
             //ConvertHangOutPlacesCsvToJson(@"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.csv", @"C:\Users\dan.hintea\Downloads\Mobile app contest - Places.json");
