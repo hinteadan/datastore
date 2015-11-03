@@ -3,6 +3,8 @@ using HttpDataStore.StorageEngine;
 using System.Web;
 using System.Web.Http;
 using HttpDataStore.Model;
+using HttpDataStore.Store;
+
 namespace HttpDataStore.Infrastructure
 {
     public class BaseController : ApiController

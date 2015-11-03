@@ -3,6 +3,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using HttpDataStore.Model;
+using HttpDataStore.Store;
+
 namespace HttpDataStore.StorageEngine
 {
     public class StoreRepository

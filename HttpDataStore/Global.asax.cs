@@ -1,4 +1,5 @@
 ﻿using HttpDataStore.StorageEngine;
+using HttpDataStore.Store;
 using System.Web.Http;
 using System.Web.Routing;
 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HttpDataStore.Model;
-namespace HttpDataStore.StorageEngine
+namespace HttpDataStore.Store
 {
     internal class InMemoryStore : IStoreData<object>
     {

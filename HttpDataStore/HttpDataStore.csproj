@@ -93,7 +93,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.Cors">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -147,15 +146,13 @@
     <Compile Include="QueryDataStore.cs" />
     <Compile Include="RealtimeBroadcaster.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="StorageEngine\CachedJsonFileStore.cs" />
-    <Compile Include="StorageEngine\InMemoryStore.cs" />
-    <Compile Include="StorageEngine\IStoreData.cs" />
-    <Compile Include="StorageEngine\JsonFileStore.cs" />
     <Compile Include="StorageEngine\StoreRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -173,6 +170,10 @@
     <ProjectReference Include="..\HttpDataStore.Model\HttpDataStore.Model.csproj">
       <Project>{0d5e9677-f352-42ac-8ea5-2a90a2521c8b}</Project>
       <Name>HttpDataStore.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HttpDataStore.Store\HttpDataStore.Store.csproj">
+      <Project>{cded8e00-d34a-491f-9fc2-f568954826df}</Project>
+      <Name>HttpDataStore.Store</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

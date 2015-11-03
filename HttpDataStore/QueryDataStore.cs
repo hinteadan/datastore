@@ -6,6 +6,8 @@ using System.Linq;
 using HttpDataStore.Client;
 using HttpDataStore.Model;
 using HttpDataStore.StorageEngine;
+using HttpDataStore.Store;
+
 namespace HttpDataStore
 {
     public class QueryDataStore

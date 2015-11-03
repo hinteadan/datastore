@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace HttpDataStore.StorageEngine
+namespace HttpDataStore.Store
 {
     public class JsonFileStore : IStoreData<object>
     {

@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using HttpDataStore.Model;
-namespace HttpDataStore.StorageEngine
+
+namespace HttpDataStore.Store
 {
     public interface IStoreData<T>
     {
