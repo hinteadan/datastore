@@ -1,4 +1,5 @@
 ﻿using HttpDataStore.Model;
+using Metrics;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,14 @@ namespace HttpDataStore.StorageEngine
         private readonly DirectoryInfo storeDirectory;
         private readonly string metaStoreFilePath;
         protected readonly Dictionary<Guid, Dictionary<string, object>> metaStore;
+
+        private readonly Metrics.Timer timerForSave = Metric.Context("JsonFileStore").Timer("Save Entity", Unit.Requests);
+        private readonly Metrics.Timer timerForLoad = Metric.Context("JsonFileStore").Timer("Load Entity", Unit.Requests);
+        private readonly Metrics.Timer timerForQuery = Metric.Context("JsonFileStore").Timer("Query for Entities", Unit.Requests);
+        private readonly Metrics.Timer timerForDelete = Metric.Context("JsonFileStore").Timer("Delete Entity", Unit.Requests);
+
+        private readonly Metrics.Timer timerForMetaUpdate = Metric.Context("JsonFileStore").Timer("Meta-data Update", Unit.Requests);
+        private readonly Metrics.Timer timerForAlterValidation = Metric.Context("JsonFileStore").Timer("Alter Validation", Unit.Requests);
 
         public JsonFileStore() : this(null) { }
         public JsonFileStore(string storeName)
@@ -49,8 +58,11 @@ namespace HttpDataStore.StorageEngine
 
         public virtual Entity<object> Save(Entity<object> data)
         {
-            ValidateAlterOperationFor(data);
-            return SaveWithoutAlterValidation(data);
+            using (timerForSave.NewContext(data.Id.ToString()))
+            {
+                ValidateAlterOperationFor(data);
+                return SaveWithoutAlterValidation(data);
+            }
         }
 
         protected Entity<object> SaveWithoutAlterValidation(Entity<object> data)
@@ -66,25 +78,34 @@ namespace HttpDataStore.StorageEngine
 
         public virtual Entity<object> Load(Guid id)
         {
-            string filePath = GenerateDataFilePath(id);
-            if (!File.Exists(filePath))
+            using (timerForLoad.NewContext(id.ToString()))
             {
-                return null;
+                string filePath = GenerateDataFilePath(id);
+                if (!File.Exists(filePath))
+                {
+                    return null;
+                }
+                return JsonConvert.DeserializeObject<Entity<object>>(File.ReadAllText(filePath));
             }
-            return JsonConvert.DeserializeObject<Entity<object>>(File.ReadAllText(filePath));
         }
 
         public virtual IEnumerable<Entity<object>> Query(Func<Dictionary<string, object>, bool> metaDataPredicate)
         {
-            var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
-            return ids.Select(id => Load(id)).Where(d => d != null).ToArray();
+            using (timerForQuery.NewContext())
+            {
+                var ids = metaStore.Where(v => metaDataPredicate(v.Value)).Select(v => v.Key);
+                return ids.Select(id => Load(id)).Where(d => d != null).ToArray();
+            }
         }
 
         public virtual void Delete(Guid id)
         {
-            File.Delete(GenerateDataFilePath(id));
-            metaStore.Remove(id);
-            UpdateMetaFile();
+            using (timerForDelete.NewContext(id.ToString()))
+            {
+                File.Delete(GenerateDataFilePath(id));
+                metaStore.Remove(id);
+                UpdateMetaFile();
+            }
         }
 
         public virtual IEnumerable<KeyValuePair<Guid, Dictionary<string, object>>> QueryMeta(Func<Dictionary<string, object>, bool> metaDataPredicate)
@@ -104,7 +125,10 @@ namespace HttpDataStore.StorageEngine
 
         private void UpdateMetaFile()
         {
-            RunWithRetry(UpdateAndPersistMetadata, 30, TimeSpan.FromSeconds(1));
+            using (timerForMetaUpdate.NewContext())
+            {
+                RunWithRetry(UpdateAndPersistMetadata, 30, TimeSpan.FromSeconds(1));
+            }
         }
 
         private void UpdateAndPersistMetadata()
@@ -129,15 +153,18 @@ namespace HttpDataStore.StorageEngine
 
         private void ValidateAlterOperationFor(Entity<object> entity)
         {
-            var exsitingEntity = Load(entity.Id);
-            if (exsitingEntity == null)
+            using (timerForAlterValidation.NewContext(entity.Id.ToString()))
             {
+                var exsitingEntity = Load(entity.Id);
+                if (exsitingEntity == null)
+                {
+                    entity.PinAlterPoint();
+                    return;
+                }
+                exsitingEntity.ValidateAlterOperation(entity);
+                exsitingEntity.PinAlterPoint();
                 entity.PinAlterPoint();
-                return;
             }
-            exsitingEntity.ValidateAlterOperation(entity);
-            exsitingEntity.PinAlterPoint();
-            entity.PinAlterPoint();
         }
 
         private void RunWithRetry(Action process, int maxRetries, TimeSpan retryInterval)
