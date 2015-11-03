@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DDDEF1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpDataStore.Store", "HttpDataStore.Store\HttpDataStore.Store.csproj", "{CDED8E00-D34A-491F-9FC2-F568954826DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpDataStore.AzureStore", "HttpDataStore.AzureStore\HttpDataStore.AzureStore.csproj", "{E85E61CA-EEB7-47BA-B73F-8D5DE53737CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{CDED8E00-D34A-491F-9FC2-F568954826DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDED8E00-D34A-491F-9FC2-F568954826DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDED8E00-D34A-491F-9FC2-F568954826DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85E61CA-EEB7-47BA-B73F-8D5DE53737CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85E61CA-EEB7-47BA-B73F-8D5DE53737CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85E61CA-EEB7-47BA-B73F-8D5DE53737CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85E61CA-EEB7-47BA-B73F-8D5DE53737CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
